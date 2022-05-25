@@ -27,6 +27,8 @@ class Server {
 
     constructor() {
         this.app = express();
+
+        this.setupStaticFolder();
         this.initializeMiddlewares();
         this.initializeSwaggerDocs();
         RegisterRoutes(this.app);
@@ -37,6 +39,10 @@ class Server {
             console.log(`App listening on port ${process.env.PORT}`);
         });
     }
+
+    public setupStaticFolder() {
+        this.app.use(express.static("public"));
+      }
 
     private initializeMiddlewares() {
         this.app.use(express.json());
