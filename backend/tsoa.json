@@ -1,0 +1,45 @@
+{
+    "entryFile": "src/server.ts",
+    "noImplicitAdditionalProperties": "throw-on-extras",
+    "controllerPathGlobs": [
+        "src/api/*.ts"
+    ],
+    "spec": {
+        "outputDirectory": "build",
+        "specVersion": 3,
+        "spec": {
+            "servers": [
+                {
+                    "url": "/",
+                    "description": "Current API"
+                },
+                {
+                    "url": "http://localhost:4000/",
+                    "description": "Local development"
+                },
+                {
+                    "url": "https://gardengames.vormadal.com/",
+                    "description": "Production"
+                }
+            ]
+        },
+        "securityDefinitions": {},
+        "tags": [
+            {
+                "name": "Common",
+                "description": "You need an API key to access these endpoints."
+            },
+            {
+                "name": "Admin"
+            },
+            {
+                "name": "Api key management"
+            }
+        ]
+    },
+    "routes": {
+        "routesDir": "build",
+        "iocModule": "./src/inversify/ioc",
+        "_authenticationModule": "./src/authentication.ts"
+    }
+}

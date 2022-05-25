@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  backend:
+    container_name: gardengames-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://admin:admin@postgres:5432/gardengames-db
+      NODE_ENV: development
+      PORT: 4000
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./:/app/
+      - /app/node_modules
+  postgres:
+    container_name: postgres
+    image: postgres:14.3
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./src/migrations/dbinit.sql:/docker-entrypoint-initdb.d/dbinit.sql
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: gardengames-db
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:6
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@vormadal.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+volumes:
+  db-data:
+  pgadmin-data:
