@@ -17,15 +17,15 @@ COPY ./frontend .
 # build the app ##
 RUN yarn build
 
-FROM node:16.9.0-alpine as server
+FROM node:16.9.0-alpine as backend
 
-WORKDIR /server
+WORKDIR /backend
 
-COPY ./server/package.json ./
-COPY ./server/yarn.lock ./
+COPY ./backend/package.json ./
+COPY ./backend/yarn.lock ./
 RUN yarn install --frozen-lockfile
 
-COPY ./server .
+COPY ./backend .
 
 RUN yarn run build
 
@@ -37,8 +37,8 @@ RUN mkdir -p /home/node && chown -R node:node /home/node
 WORKDIR /home/node
 
 # Copy package.json and package-lock.json
-COPY ./server/package.json ./
-COPY ./server/yarn.lock ./
+COPY ./backend/package.json ./
+COPY ./backend/yarn.lock ./
 
 # Switch to user node
 USER node
@@ -47,10 +47,10 @@ USER node
 RUN yarn install --frozen-lockfile --production=true
 
 # Copy built js files for server and change ownership to user node. 
-COPY --chown=node:node --from=server /server/build /home/node/server
+COPY --chown=node:node --from=backend /backend/build /home/node/backend
 
 # Copy build js files for react app and change ownership to user node.
-COPY --chown=node:node --from=client /frontend/build ./public
+COPY --chown=node:node --from=client /frontend/dist ./public
 
 # run the server
-CMD ["node", "./server/src/server.js"]
+CMD ["node", "./backend/src/server.js"]
