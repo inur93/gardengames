@@ -5,7 +5,7 @@ import { provideSingleton } from '../inversify/provideSingleton';
 import { ParticipantRepository } from '../repositories/ParticipantRepository';
 
 @Tags('Participants')
-@Route('participants')
+@Route('api/participants')
 @provideSingleton(ParticipantApi)
 export class ParticipantApi extends Controller {
 

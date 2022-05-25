@@ -5,9 +5,10 @@
   "license": "MIT",
   "main": "build/src/server.js",
   "scripts": {
-    "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\"",
-    "dev:docker": "tsoa spec-and-routes && concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\"",
-    "build": "tsoa spec-and-routes && tsc",
+    "dev": "concurrently \"nodemon\" \"nodemon -x yarn run spec-and-routes\"",
+    "dev:docker": "yarn run spec-and-routes && concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\"",
+    "build": "yarn run spec-and-routes && tsc",
+    "spec-and-routes": "tsoa spec-and-routes",
     "start": "node build/src/server.js",
     "typeorm": "typeorm-ts-node-commonjs",
     "migrate:run": "typeorm migration:run -d src/data-source.ts",

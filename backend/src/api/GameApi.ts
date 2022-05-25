@@ -7,7 +7,7 @@ import { GameRepository } from '../repositories/GameRepository';
 import { ScoreRepository } from '../repositories/ScoreRepository';
 
 @Tags('Game')
-@Route('games')
+@Route('api/games')
 @provideSingleton(GameApi)
 export class GameApi extends Controller {
 
