@@ -10,10 +10,14 @@ export class ScoreRepository {
 
 
     public async create(score: Score): Promise<Score> {
-        const entity = await this.repo.create(score);
+        const entity = this.repo.create(score);
 
         await this.repo.save(entity);
         return entity;
+    }
+
+    public async delete(id: number): Promise<void> {
+        await this.repo.delete(id);
     }
 
 }

@@ -5,6 +5,7 @@ import { Pool } from "pg";
 import swaggerUi from "swagger-ui-express";
 import { RegisterRoutes } from "../build/routes";
 import cors from 'cors';
+import path from "path";
 // import dotenv from "dotenv";
 
 const pool = new Pool({
@@ -28,10 +29,11 @@ class Server {
     constructor() {
         this.app = express();
 
-        this.setupStaticFolder();
         this.initializeMiddlewares();
         this.initializeSwaggerDocs();
         RegisterRoutes(this.app);
+
+        this.setupStaticFolder();
     }
 
     public listen() {
@@ -42,7 +44,11 @@ class Server {
 
     public setupStaticFolder() {
         this.app.use(express.static("public"));
-      }
+
+        this.app.get('*', (_, res) => {
+            res.sendFile(path.resolve('public', 'index.html'))
+        })
+    }
 
     private initializeMiddlewares() {
         this.app.use(express.json());

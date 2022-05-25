@@ -26,14 +26,15 @@
         "securityDefinitions": {},
         "tags": [
             {
-                "name": "Common",
-                "description": "You need an API key to access these endpoints."
+                "name": "Game",
+                "description": "Manage games and scores"
+            },
+            {
+                "name": "Participants",
+                "description": "Manage participants and scores"
             },
             {
                 "name": "Admin"
-            },
-            {
-                "name": "Api key management"
             }
         ]
     },

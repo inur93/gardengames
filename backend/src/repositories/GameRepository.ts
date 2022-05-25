@@ -53,4 +53,13 @@ export class GameRepository {
             return x;
         })
     }
+
+    public async update({ id, scores, ...game }: Game): Promise<void> {
+        await this.repo.update(id, game);
+    }
+
+    public async delete(id: number): Promise<void> {
+        const result = await this.repo.delete(id)
+        console.log('deleted', result.affected);
+    }
 }
