@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { IonContent, IonHeader, IonToolbar, IonTitle, IonPage } from '@ionic/vue'
+import { IonContent, IonHeader, IonToolbar, IonTitle, IonPage, IonButtons, IonButton, IonSelect, IonLabel, IonSelectOption } from '@ionic/vue'
 import { close } from 'ionicons/icons'
 import CreateParticipantForm from '../components/CreateParticipantForm.vue';
 import type { CreateScore, Game, Participant } from "../api/client";
@@ -64,7 +64,7 @@ type Data = {
 export default defineComponent({
     components: {
         CreateParticipantForm,
-        IonContent, IonHeader, IonToolbar, IonTitle, IonPage
+        IonContent, IonHeader, IonToolbar, IonTitle, IonPage, IonButtons, IonButton, IonSelect, IonLabel, IonSelectOption
     },
 
     data(): Data {
