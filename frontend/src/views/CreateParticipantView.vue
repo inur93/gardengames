@@ -18,9 +18,10 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { IonContent, IonHeader, IonToolbar, IonTitle, IonPage } from '@ionic/vue'
+import { IonContent, IonHeader, IonToolbar, IonTitle, IonPage, toastController } from '@ionic/vue'
 import { close } from 'ionicons/icons'
 import CreateParticipantForm from '../components/CreateParticipantForm.vue';
+import type { Participant } from "../api/client";
 
 export default defineComponent({
     components: {
@@ -34,7 +35,14 @@ export default defineComponent({
         }
     },
     methods: {
-        submit() { }
+        async submit(participant: Participant) {
+            const toast = await toastController.create({
+                message: `${participant.name} er oprettet!`,
+                duration: 2000,
+                position: 'top'
+            })
+            toast.present();
+        }
     },
     emits: {
         setOpen(isOpen: boolean) {

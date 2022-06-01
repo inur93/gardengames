@@ -35,6 +35,7 @@ export default defineComponent({
             e.preventDefault();
             const data = form2Obj<Participant>(e);
             const created = await client.createParticipant(data);
+            (e.target as HTMLFormElement).reset();
             this.$emit('submit', created);
         }
     },

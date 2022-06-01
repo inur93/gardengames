@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { IonContent, IonHeader, IonToolbar, IonTitle, IonPage, IonButtons, IonButton, IonSelect, IonLabel, IonSelectOption } from '@ionic/vue'
+import { IonContent, IonHeader, IonToolbar, IonTitle, IonPage, IonButtons, IonButton, IonSelect, IonLabel, IonSelectOption, toastController } from '@ionic/vue'
 import { close } from 'ionicons/icons'
 import CreateParticipantForm from '../components/CreateParticipantForm.vue';
 import type { CreateScore, Game, Participant } from "../api/client";
@@ -87,7 +87,7 @@ export default defineComponent({
     },
     setup() {
         return {
-            
+
             close
         }
     },
@@ -99,7 +99,13 @@ export default defineComponent({
                 .filter(x => !!x)
                 .map(x => Number.parseInt(x as any))
             const created = await api.createScore(data);
-            this.$emit('submit', created);
+            const toast = await toastController.create({
+                message: "Resultatet er oprettet",
+                duration: 2000,
+                position: 'top'
+            })
+            toast.present();
+            this.$router.push('/scores')
         }
     },
     emits: {
