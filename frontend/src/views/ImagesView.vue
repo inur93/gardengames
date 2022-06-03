@@ -80,12 +80,20 @@ export default defineComponent({
                 })
             }
 
-            const photo = await Camera.getPhoto({
-                resultType: CameraResultType.Uri,
-                quality: 100
+            const images = await Camera.pickImages({
+                correctOrientation: true,
+                presentationStyle: 'fullscreen',
+                quality: 100,
+                limit: 1
             })
 
-            const file = await fetch(photo.webPath!).then(r => r.blob())
+            const file = await fetch(images.photos[0].webPath).then(res => res.blob())
+            // const photo = await Camera.getPhoto({
+            //     resultType: CameraResultType.Uri,
+            //     quality: 100
+            // })
+
+            // const file = await fetch(photo.webPath!).then(r => r.blob())
 
             await client.uploadMedia({
                 data: file,
