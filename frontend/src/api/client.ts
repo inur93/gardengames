@@ -27,7 +27,7 @@ export class Client {
      * @return Ok
      */
     getGames(  cancelToken?: CancelToken | undefined): Promise<Game[]> {
-        let url_ = this.baseUrl + "/games";
+        let url_ = this.baseUrl + "/api/games";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -85,7 +85,7 @@ export class Client {
      * @return Ok
      */
     createGame(body: Name_ , cancelToken?: CancelToken | undefined): Promise<Game> {
-        let url_ = this.baseUrl + "/games";
+        let url_ = this.baseUrl + "/api/games";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -140,7 +140,7 @@ export class Client {
      * @return Ok
      */
     createScore(body: CreateScore , cancelToken?: CancelToken | undefined): Promise<Score[]> {
-        let url_ = this.baseUrl + "/games/{id}/score";
+        let url_ = this.baseUrl + "/api/games/{id}/score";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -201,8 +201,125 @@ export class Client {
     /**
      * @return Ok
      */
+    getMedia(  cancelToken?: CancelToken | undefined): Promise<Media[]> {
+        let url_ = this.baseUrl + "/api/media";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetMedia(_response);
+        });
+    }
+
+    protected processGetMedia(response: AxiosResponse): Promise<Media[]> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(Media.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return Promise.resolve<Media[]>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<Media[]>(null as any);
+    }
+
+    /**
+     * @param file (optional) 
+     * @return Ok
+     */
+    uploadMedia(file: FileParameter | undefined , cancelToken?: CancelToken | undefined): Promise<Media> {
+        let url_ = this.baseUrl + "/api/media";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (file === null || file === undefined)
+            throw new Error("The parameter 'file' cannot be null.");
+        else
+            content_.append("file", file.data, file.fileName ? file.fileName : "file");
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processUploadMedia(_response);
+        });
+    }
+
+    protected processUploadMedia(response: AxiosResponse): Promise<Media> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = Media.fromJS(resultData200);
+            return Promise.resolve<Media>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<Media>(null as any);
+    }
+
+    /**
+     * @return Ok
+     */
     getParticipants(  cancelToken?: CancelToken | undefined): Promise<Participant[]> {
-        let url_ = this.baseUrl + "/participants";
+        let url_ = this.baseUrl + "/api/participants";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -260,7 +377,7 @@ export class Client {
      * @return Ok
      */
     createParticipant(body: IdOrScores__ , cancelToken?: CancelToken | undefined): Promise<Participant> {
-        let url_ = this.baseUrl + "/participants";
+        let url_ = this.baseUrl + "/api/participants";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -567,6 +684,54 @@ export interface ICreateScore {
     game: number;
 }
 
+export class Media implements IMedia {
+    id!: number;
+    url!: string;
+    width!: number;
+    height!: number;
+
+    constructor(data?: IMedia) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.url = _data["url"];
+            this.width = _data["width"];
+            this.height = _data["height"];
+        }
+    }
+
+    static fromJS(data: any): Media {
+        data = typeof data === 'object' ? data : {};
+        let result = new Media();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["url"] = this.url;
+        data["width"] = this.width;
+        data["height"] = this.height;
+        return data;
+    }
+}
+
+export interface IMedia {
+    id: number;
+    url: string;
+    width: number;
+    height: number;
+}
+
 /** From T, pick a set of properties whose keys are in the union K */
 export class IdOrScores__ implements IIdOrScores__ {
     name!: string;
@@ -607,6 +772,11 @@ export class IdOrScores__ implements IIdOrScores__ {
 export interface IIdOrScores__ {
     name: string;
     nickname?: string;
+}
+
+export interface FileParameter {
+    data: any;
+    fileName: string;
 }
 
 export class ApiException extends Error {

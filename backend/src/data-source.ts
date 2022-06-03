@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm"
 import { Game } from "./entity/Game"
+import { Media } from "./entity/Media"
 import { Participant } from "./entity/Participant"
 import { Score } from "./entity/Score"
 
@@ -11,7 +12,8 @@ export const AppDataSource = new DataSource({
     entities: [
         Game,
         Participant,
-        Score
+        Score,
+        Media
     ],
     migrationsTableName: "postgres_migrations",
     metadataTableName: 'entity_metadata',

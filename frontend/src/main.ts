@@ -5,6 +5,8 @@ import '@ionic/vue/css/core.css';
 import '@ionic/vue/css/normalize.css';
 import '@ionic/vue/css/structure.css';
 import '@ionic/vue/css/typography.css';
+/* Virtual Scroll */
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 
 /* Optional CSS utils that can be commented out */
 import '@ionic/vue/css/padding.css';
@@ -19,12 +21,18 @@ import { IonicVue } from '@ionic/vue';
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
+import VueVirtualScroller, { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller';
+
 
 const app = createApp(App);
 
+
 app.use(IonicVue);
 app.use(router);
+app.use(VueVirtualScroller);
+app.component("DynamicScroller", DynamicScroller)
+app.component("DynamicScrollerItem", DynamicScrollerItem)
 
 router.isReady().then(() => {
-    app.mount('#app');
-  });
+  app.mount('#app');
+});

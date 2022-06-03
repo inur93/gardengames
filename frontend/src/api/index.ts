@@ -1,5 +1,5 @@
 
-const baseUrl = process.env.NODE_ENV === 'development' ? "http://localhost:4000/api" : '/api';
+const baseUrl = process.env.NODE_ENV === 'development' ? "http://localhost:4000" : '';
 
 // import './apiMock';
 import { Client } from './client';

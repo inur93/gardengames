@@ -8,8 +8,11 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - postgres
+    env_file:
+      - .env
     environment:
       DATABASE_URL: postgres://admin:admin@postgres:5432/gardengames-db
+      CLOUDINARY_FOLDER: development
       NODE_ENV: development
       PORT: 4000
     ports:
