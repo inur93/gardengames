@@ -3,7 +3,9 @@
         <ion-header :translucent="true">
             <ion-toolbar>
                 <ion-title>Billeder</ion-title>
+
                 <ion-buttons slot="secondary">
+                    <ion-spinner v-if="loading" name="bubbles" color="primary"></ion-spinner>
                     <ion-button @click="takePhoto">
                         <ion-icon slot="icon-only" :icon="add"></ion-icon>
                     </ion-button>
@@ -34,10 +36,10 @@
 <script lang="ts">
 
 import {
-    IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonIcon, toastController
+    IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonIcon, toastController, IonSpinner
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import { Camera, CameraResultType } from '@capacitor/camera'
+import { Camera } from '@capacitor/camera'
 import client from '../api'
 import type { Media } from '../api/client';
 import type { CameraPermissionType } from '@capacitor/camera';
@@ -46,11 +48,12 @@ import { isPlatform } from '@ionic/vue';
 
 type Data = {
     photos: Media[]
+    loading: boolean
 }
 
 export default defineComponent({
     components: {
-        IonContent, IonPage, IonTitle, IonHeader, IonToolbar, IonButton, IonButtons, IonIcon
+        IonContent, IonPage, IonTitle, IonHeader, IonToolbar, IonButton, IonButtons, IonIcon, IonSpinner
     },
     setup() {
         return {
@@ -59,7 +62,8 @@ export default defineComponent({
     },
     data(): Data {
         return {
-            photos: []
+            photos: [],
+            loading: false
         }
     },
     methods: {
@@ -84,24 +88,30 @@ export default defineComponent({
                 correctOrientation: true,
                 presentationStyle: 'fullscreen',
                 quality: 100,
-                limit: 1
+                limit: 10
             })
 
-            const file = await fetch(images.photos[0].webPath).then(res => res.blob())
-            // const photo = await Camera.getPhoto({
-            //     resultType: CameraResultType.Uri,
-            //     quality: 100
-            // })
+            this.loading = true;
+            const tasks = images.photos.map(photo => fetch(photo.webPath)
+                .then(res => res.blob())
+                .then(blob => {
+                    client.uploadMedia({
+                        data: blob,
+                        fileName: photo.path || 'photo'
+                    }).then(media => {
+                        this.photos.push(media);
+                    }).catch(err => {
+                        toastController.create({
+                            message: 'Fejl ved upload af billede',
+                            duration: 2000
+                        }).then(toast => toast.present());
+                    })
+                }))
 
-            // const file = await fetch(photo.webPath!).then(r => r.blob())
-
-            await client.uploadMedia({
-                data: file,
-                fileName: 'photo'
-            })
-
+            await Promise.all(tasks);
+            this.loading = false;
             const toast = await toastController.create({
-                message: "Billedet er uploadet",
+                message: tasks.length > 1 ? "Billederne er uploadet" : "Billedet er uploadet",
                 duration: 2000,
                 position: 'top'
             })
