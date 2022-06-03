@@ -40,7 +40,9 @@ import { defineComponent } from 'vue';
 import { Camera, CameraResultType } from '@capacitor/camera'
 import client from '../api'
 import type { Media } from '../api/client';
+import type { CameraPermissionType } from '@capacitor/camera';
 import { add } from 'ionicons/icons'
+import { isPlatform } from '@ionic/vue';
 
 type Data = {
     photos: Media[]
@@ -62,6 +64,22 @@ export default defineComponent({
     },
     methods: {
         async takePhoto() {
+            let permissions = await Camera.checkPermissions()
+
+            let requestPermissions: CameraPermissionType[] = [];
+
+            if (permissions.camera != 'granted' && permissions.camera != 'denied') {
+                requestPermissions.push('camera');
+            }
+            if (permissions.photos != 'granted' && permissions.photos != 'denied') {
+                requestPermissions.push('photos');
+            }
+            if (requestPermissions.length > 0 && !isPlatform('desktop')) {
+                permissions = await Camera.requestPermissions({
+                    permissions: requestPermissions
+                })
+            }
+
             const photo = await Camera.getPhoto({
                 resultType: CameraResultType.Uri,
                 quality: 100
