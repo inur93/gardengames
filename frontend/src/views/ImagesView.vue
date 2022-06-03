@@ -92,26 +92,35 @@ export default defineComponent({
             })
 
             this.loading = true;
-            const tasks = images.photos.map(photo => fetch(photo.webPath)
-                .then(res => res.blob())
-                .then(blob => {
-                    client.uploadMedia({
-                        data: blob,
-                        fileName: photo.path || 'photo'
-                    }).then(media => {
-                        this.photos.push(media);
-                    }).catch(err => {
-                        toastController.create({
-                            message: 'Fejl ved upload af billede',
-                            duration: 2000
-                        }).then(toast => toast.present());
-                    })
-                }))
 
-            await Promise.all(tasks);
+            (await toastController.create({
+                message: `Uploader ${images.photos.length} billede${images.photos.length === 1 ? '' : 'r'}...`,
+                duration: 2000,
+                position: 'top'
+            })).present()
+
+            for (const image of images.photos) {
+                const file = await fetch(image.webPath).then(res => res.blob())
+
+                try {
+                    const uploaded = await client.uploadMedia({
+                        data: file,
+                        fileName: "photo"
+                    });
+                    this.photos.push(uploaded);
+                } catch (e) {
+                    const toast = await toastController.create({
+                        message: 'Der skete en fejl ved upload af billede',
+                        duration: 2000,
+                        position: 'top'
+                    })
+                    toast.present()
+                }
+            }
+
             this.loading = false;
             const toast = await toastController.create({
-                message: tasks.length > 1 ? "Billederne er uploadet" : "Billedet er uploadet",
+                message: images.photos.length > 1 ? "Billederne er uploadet" : "Billedet er uploadet",
                 duration: 2000,
                 position: 'top'
             })
