@@ -14,9 +14,9 @@
             <form @submit="submit">
                 <ion-item>
                     <ion-label>Spil</ion-label>
-                    <ion-select name="game" placeholder="Vælg spil">
+                    <ion-select name="game" placeholder="Vælg spil" cancel-text="Annuller" :value="selected">
                         <div v-for="option in gameOptions">
-                            <ion-select-option :value="option.id">{{ option.name }}</ion-select-option>
+                            <ion-select-option :value="`${option.id}`">{{ option.name }}</ion-select-option>
                         </div>
                     </ion-select>
                 </ion-item>
@@ -24,7 +24,7 @@
                 <div v-for="no in entries">
                     <ion-item>
                         <ion-label>Nummer {{ no }}</ion-label>
-                        <ion-select :name="`participants[${no - 1}]`">
+                        <ion-select :name="`participants[${no - 1}]`" cancel-text="Annuller">
                             <div v-for="option in participantsOptions">
                                 <ion-select-option :value="option.id">
                                     {{ option.nickname || option.name }}
@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { IonContent, IonHeader, IonToolbar, IonTitle, IonPage, IonButtons, IonButton, IonSelect, IonLabel, IonSelectOption, toastController } from '@ionic/vue'
+import { IonContent, IonHeader, IonToolbar, IonTitle, IonPage, IonItem, IonButtons, IonButton, IonSelect, IonLabel, IonSelectOption, toastController } from '@ionic/vue'
 import { close } from 'ionicons/icons'
 import CreateParticipantForm from '../components/CreateParticipantForm.vue';
 import type { CreateScore, Game, Participant } from "../api/client";
@@ -64,7 +64,7 @@ type Data = {
 export default defineComponent({
     components: {
         CreateParticipantForm,
-        IonContent, IonHeader, IonToolbar, IonTitle, IonPage, IonButtons, IonButton, IonSelect, IonLabel, IonSelectOption
+        IonContent, IonHeader, IonToolbar, IonTitle, IonPage, IonItem, IonButtons, IonButton, IonSelect, IonLabel, IonSelectOption
     },
 
     data(): Data {
@@ -77,12 +77,14 @@ export default defineComponent({
         }
     },
     async mounted() {
+
         const [games, participants] = await Promise.all([
             api.getGames(),
             api.getParticipants()
         ])
         this.gameOptions = games;
         this.participantsOptions = participants;
+        this.selected = this.$route.query.game?.toString();
         this.loading = false;
     },
     setup() {

@@ -32,11 +32,11 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
-import { IonCard, IonCardContent, IonCardTitle, IonCardHeader, IonToolbar, IonButton, IonButtons, IonIcon } from '@ionic/vue'
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonToolbar } from '@ionic/vue'
 import { add } from 'ionicons/icons'
-import type { Game, Score } from '../api/client'
+import type { PropType } from 'vue'
+import { defineComponent } from 'vue'
+import type { Game } from '../api/client'
 export default defineComponent({
   components: {
     IonCard, IonCardContent, IonCardTitle, IonCardHeader, IonToolbar, IonButton, IonButtons, IonIcon

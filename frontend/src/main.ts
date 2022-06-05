@@ -21,19 +21,18 @@ import { IonicVue } from '@ionic/vue';
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import VueVirtualScroller, { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller';
+import VueVirtualScroller from 'vue-virtual-scroller';
 import LogRocket from 'logrocket';
-
-LogRocket.init('ykqnbu/gardengames');
-
+if (process.env.NODE_ENV !== 'development') {
+  console.log('using logrocket');
+  LogRocket.init('ykqnbu/gardengames');
+}
 const app = createApp(App);
 
 
 app.use(IonicVue);
 app.use(router);
 app.use(VueVirtualScroller);
-app.component("DynamicScroller", DynamicScroller)
-app.component("DynamicScrollerItem", DynamicScrollerItem)
 
 router.isReady().then(() => {
   app.mount('#app');

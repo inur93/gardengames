@@ -36,7 +36,7 @@
 <script lang="ts">
 
 import {
-    IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonIcon, toastController, IonSpinner
+    IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonButtons, IonIcon, toastController, IonSpinner
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { Camera } from '@capacitor/camera'
@@ -53,7 +53,7 @@ type Data = {
 
 export default defineComponent({
     components: {
-        IonContent, IonPage, IonTitle, IonHeader, IonToolbar, IonButton, IonButtons, IonIcon, IonSpinner
+        IonContent, IonPage, IonTitle, IonHeader, IonToolbar, IonList, IonButton, IonButtons, IonIcon, IonSpinner
     },
     setup() {
         return {
@@ -68,6 +68,7 @@ export default defineComponent({
     },
     methods: {
         async takePhoto() {
+            console.log('check permissions...')
             let permissions = await Camera.checkPermissions()
 
             let requestPermissions: CameraPermissionType[] = [];
@@ -79,20 +80,18 @@ export default defineComponent({
                 requestPermissions.push('photos');
             }
             if (requestPermissions.length > 0 && !isPlatform('desktop')) {
+                console.log('requesting permissions...', requestPermissions)
                 permissions = await Camera.requestPermissions({
                     permissions: requestPermissions
                 })
             }
 
             const images = await Camera.pickImages({
-                correctOrientation: true,
-                presentationStyle: 'popover',
-                quality: 100,
-                limit: 10
+                quality: 100
             })
 
             this.loading = true;
-
+            
             (await toastController.create({
                 message: `Uploader ${images.photos.length} billede${images.photos.length === 1 ? '' : 'r'}...`,
                 duration: 2000,
