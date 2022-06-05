@@ -22,7 +22,9 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import VueVirtualScroller, { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller';
+import LogRocket from 'logrocket';
 
+LogRocket.init('ykqnbu/gardengames');
 
 const app = createApp(App);
 

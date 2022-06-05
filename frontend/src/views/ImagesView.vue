@@ -86,7 +86,7 @@ export default defineComponent({
 
             const images = await Camera.pickImages({
                 correctOrientation: true,
-                presentationStyle: 'fullscreen',
+                presentationStyle: 'popover',
                 quality: 100,
                 limit: 10
             })

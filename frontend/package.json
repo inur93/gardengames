@@ -17,6 +17,7 @@
     "@types/events": "^3.0.0",
     "axios": "^0.27.2",
     "events": "^3.3.0",
+    "logrocket": "^3.0.0",
     "nswag": "^13.16.0",
     "vue": "^3.2.33",
     "vue-router": "^4.0.14",
