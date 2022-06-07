@@ -1,9 +1,8 @@
 <template>
     <ion-page>
-        <ion-header :translucent="true">
+        <ion-header>
             <ion-toolbar>
                 <ion-title>Billeder</ion-title>
-
                 <ion-buttons slot="secondary">
                     <ion-spinner v-if="loading" name="bubbles" color="primary"></ion-spinner>
                     <ion-button @click="takePhoto">
@@ -13,11 +12,6 @@
             </ion-toolbar>
         </ion-header>
         <ion-content :fullscreen="true">
-            <ion-header collapse="condense">
-                <ion-toolbar>
-                    <ion-title size="large">Billeder</ion-title>
-                </ion-toolbar>
-            </ion-header>
             <ion-list>
                 <DynamicScroller class="scroller" :items="photos" :min-item-size="780">
                     <template v-slot="{ item, index, active }">
@@ -44,7 +38,7 @@ import client from '../api'
 import type { Media } from '../api/client';
 import type { CameraPermissionType } from '@capacitor/camera';
 import { add } from 'ionicons/icons'
-import { isPlatform } from '@ionic/vue';
+import { isPlatform, getPlatforms } from '@ionic/vue';
 
 type Data = {
     photos: Media[]
@@ -79,19 +73,24 @@ export default defineComponent({
             if (permissions.photos != 'granted' && permissions.photos != 'denied') {
                 requestPermissions.push('photos');
             }
-            if (requestPermissions.length > 0 && !isPlatform('desktop')) {
+
+            console.log('isPlatform?', getPlatforms().map(platform => ({ platform, isThis: isPlatform(platform) })));
+
+            if (requestPermissions.length > 0 && isPlatform('ios') || isPlatform('android')) {
                 console.log('requesting permissions...', requestPermissions)
                 permissions = await Camera.requestPermissions({
                     permissions: requestPermissions
                 })
             }
 
+            console.log('picking images...');
             const images = await Camera.pickImages({
                 quality: 100
             })
 
+            console.log('saving images...', images)
             this.loading = true;
-            
+
             (await toastController.create({
                 message: `Uploader ${images.photos.length} billede${images.photos.length === 1 ? '' : 'r'}...`,
                 duration: 2000,

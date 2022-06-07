@@ -2,13 +2,13 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-title>Home</ion-title>
+        <ion-title>Stillinger</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Home</ion-title>
+          <ion-title size="large">Stillinger</ion-title>
         </ion-toolbar>
       </ion-header>
 

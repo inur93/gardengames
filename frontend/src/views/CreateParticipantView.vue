@@ -2,13 +2,13 @@
     <ion-page>
         <ion-header :translucent="true">
             <ion-toolbar>
-                <ion-title>Home</ion-title>
+                <ion-title>Opret deltager</ion-title>
             </ion-toolbar>
         </ion-header>
         <ion-content :fullscreen="true">
             <ion-header collapse="condense">
                 <ion-toolbar>
-                    <ion-title size="large">Home</ion-title>
+                    <ion-title size="large">Opret deltager</ion-title>
                 </ion-toolbar>
             </ion-header>
             <create-participant-form @submit="submit" />
