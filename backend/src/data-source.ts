@@ -3,6 +3,7 @@ import { Game } from "./entity/Game"
 import { Media } from "./entity/Media"
 import { Participant } from "./entity/Participant"
 import { Score } from "./entity/Score"
+import { Settings } from "./entity/Settings"
 
 export const AppDataSource = new DataSource({
     type: "postgres",
@@ -13,7 +14,8 @@ export const AppDataSource = new DataSource({
         Game,
         Participant,
         Score,
-        Media
+        Media,
+        Settings
     ],
     migrationsTableName: "postgres_migrations",
     metadataTableName: 'entity_metadata',

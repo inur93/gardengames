@@ -2,13 +2,13 @@
     <ion-page>
         <ion-header :translucent="true">
             <ion-toolbar>
-                <ion-title>Home</ion-title>
+                <ion-title>Opret Resultat</ion-title>
             </ion-toolbar>
         </ion-header>
         <ion-content :fullscreen="true">
             <ion-header collapse="condense">
                 <ion-toolbar>
-                    <ion-title size="large">Home</ion-title>
+                    <ion-title size="large">Opret Resultat</ion-title>
                 </ion-toolbar>
             </ion-header>
             <form @submit="submit">
@@ -35,8 +35,8 @@
                 </div>
                 <ion-toolbar>
                     <ion-buttons slot="primary">
-                        <ion-button type="submit" color="primary">
-                            Opret
+                        <ion-button type="submit" color="primary" fill="outline">
+                            Opret Resultat
                         </ion-button>
                     </ion-buttons>
                 </ion-toolbar>

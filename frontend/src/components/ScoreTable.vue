@@ -65,6 +65,6 @@ th {
 
 th {
   font-weight: 600;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid var(--table-border-color, black);
 }
 </style>

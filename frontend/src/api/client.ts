@@ -427,6 +427,112 @@ export class Client {
         }
         return Promise.resolve<Participant>(null as any);
     }
+
+    /**
+     * @return Ok
+     */
+    getSettings(  cancelToken?: CancelToken | undefined): Promise<Settings> {
+        let url_ = this.baseUrl + "/api/settings";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetSettings(_response);
+        });
+    }
+
+    protected processGetSettings(response: AxiosResponse): Promise<Settings> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = Settings.fromJS(resultData200);
+            return Promise.resolve<Settings>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<Settings>(null as any);
+    }
+
+    /**
+     * @return Ok
+     */
+    updateSettings(body: Settings , cancelToken?: CancelToken | undefined): Promise<Settings> {
+        let url_ = this.baseUrl + "/api/settings";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processUpdateSettings(_response);
+        });
+    }
+
+    protected processUpdateSettings(response: AxiosResponse): Promise<Settings> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = Settings.fromJS(resultData200);
+            return Promise.resolve<Settings>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<Settings>(null as any);
+    }
 }
 
 export class Game implements IGame {
@@ -772,6 +878,78 @@ export class IdOrScores__ implements IIdOrScores__ {
 export interface IIdOrScores__ {
     name: string;
     nickname?: string;
+}
+
+export class Settings implements ISettings {
+    id!: number;
+    title!: string;
+    cloudinaryDirectory!: string;
+    primaryColor!: string;
+    textColor!: string;
+    backgroundColor!: string;
+    iconColor!: string;
+    cardBackgroundColor!: string;
+    tableBorderColor!: string;
+    menuBackgroundColor!: string;
+
+    constructor(data?: ISettings) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.cloudinaryDirectory = _data["cloudinaryDirectory"];
+            this.primaryColor = _data["primaryColor"];
+            this.textColor = _data["textColor"];
+            this.backgroundColor = _data["backgroundColor"];
+            this.iconColor = _data["iconColor"];
+            this.cardBackgroundColor = _data["cardBackgroundColor"];
+            this.tableBorderColor = _data["tableBorderColor"];
+            this.menuBackgroundColor = _data["menuBackgroundColor"];
+        }
+    }
+
+    static fromJS(data: any): Settings {
+        data = typeof data === 'object' ? data : {};
+        let result = new Settings();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["cloudinaryDirectory"] = this.cloudinaryDirectory;
+        data["primaryColor"] = this.primaryColor;
+        data["textColor"] = this.textColor;
+        data["backgroundColor"] = this.backgroundColor;
+        data["iconColor"] = this.iconColor;
+        data["cardBackgroundColor"] = this.cardBackgroundColor;
+        data["tableBorderColor"] = this.tableBorderColor;
+        data["menuBackgroundColor"] = this.menuBackgroundColor;
+        return data;
+    }
+}
+
+export interface ISettings {
+    id: number;
+    title: string;
+    cloudinaryDirectory: string;
+    primaryColor: string;
+    textColor: string;
+    backgroundColor: string;
+    iconColor: string;
+    cardBackgroundColor: string;
+    tableBorderColor: string;
+    menuBackgroundColor: string;
 }
 
 export interface FileParameter {

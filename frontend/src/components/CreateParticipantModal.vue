@@ -11,7 +11,7 @@
                     </ion-buttons>
                 </ion-toolbar>
             </ion-header>
-            <ion-content>
+            <ion-content :fullscreen="true">
                 <create-participant-form />
             </ion-content>
         </ion-modal>

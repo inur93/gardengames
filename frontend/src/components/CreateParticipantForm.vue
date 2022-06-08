@@ -1,18 +1,18 @@
 <template>
     <form @submit="submit">
-        <ion-item>
-            <ion-label>Navn</ion-label>
-            <ion-input name="name" placeholder="Anders And" autocapitalize="words" autofocus minLength="3" required>
-            </ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label>Kaldenavn</ion-label>
-            <ion-input name="nickname" placeholder="Anden"></ion-input>
-        </ion-item>
+            <ion-item>
+                <ion-label>Navn</ion-label>
+                <ion-input name="name" placeholder="Anders And" autocapitalize="words" autofocus minLength="3" required>
+                </ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>Kaldenavn</ion-label>
+                <ion-input name="nickname" placeholder="Anden"></ion-input>
+            </ion-item>
         <ion-toolbar>
             <ion-buttons slot="primary">
-                <ion-button type="submit" color="primary">
-                    Opret
+                <ion-button type="submit" color="primary" fill="outline">
+                    Opret Deltager
                 </ion-button>
             </ion-buttons>
         </ion-toolbar>
