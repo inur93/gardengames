@@ -62,30 +62,30 @@ export default defineComponent({
     },
     methods: {
         async takePhoto() {
-            console.log('check permissions...')
-            let permissions = await Camera.checkPermissions()
+            // console.log('check permissions...')
+            // let permissions = await Camera.checkPermissions()
 
-            let requestPermissions: CameraPermissionType[] = [];
+            // let requestPermissions: CameraPermissionType[] = [];
 
-            if (permissions.camera != 'granted' && permissions.camera != 'denied') {
-                requestPermissions.push('camera');
-            }
-            if (permissions.photos != 'granted' && permissions.photos != 'denied') {
-                requestPermissions.push('photos');
-            }
+            // if (permissions.camera != 'granted' && permissions.camera != 'denied') {
+            //     requestPermissions.push('camera');
+            // }
+            // if (permissions.photos != 'granted' && permissions.photos != 'denied') {
+            //     requestPermissions.push('photos');
+            // }
 
-            console.log('isPlatform?', getPlatforms().map(platform => ({ platform, isThis: isPlatform(platform) })));
+            // console.log('isPlatform?', getPlatforms().map(platform => ({ platform, isThis: isPlatform(platform) })));
 
-            if (requestPermissions.length > 0 && (isPlatform('ios') || isPlatform('android'))) {
-                console.log('requesting permissions...', requestPermissions)
-                try {
-                    permissions = await Camera.requestPermissions({
-                        permissions: requestPermissions
-                    })
-                } catch (e) {
-                    console.error(e)
-                }
-            }
+            // if (requestPermissions.length > 0 && (isPlatform('ios') || isPlatform('android'))) {
+            //     console.log('requesting permissions...', requestPermissions)
+            //     try {
+            //         permissions = await Camera.requestPermissions({
+            //             permissions: requestPermissions
+            //         })
+            //     } catch (e) {
+            //         console.error(e)
+            //     }
+            // }
 
             console.log('picking images...');
             const images = await Camera.pickImages({
