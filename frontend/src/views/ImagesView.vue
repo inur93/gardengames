@@ -76,11 +76,15 @@ export default defineComponent({
 
             console.log('isPlatform?', getPlatforms().map(platform => ({ platform, isThis: isPlatform(platform) })));
 
-            if (requestPermissions.length > 0 && isPlatform('ios') || isPlatform('android')) {
+            if (requestPermissions.length > 0 && (isPlatform('ios') || isPlatform('android'))) {
                 console.log('requesting permissions...', requestPermissions)
-                permissions = await Camera.requestPermissions({
-                    permissions: requestPermissions
-                })
+                try {
+                    permissions = await Camera.requestPermissions({
+                        permissions: requestPermissions
+                    })
+                } catch (e) {
+                    console.error(e)
+                }
             }
 
             console.log('picking images...');
