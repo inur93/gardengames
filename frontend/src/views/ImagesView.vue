@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-        <ion-header>
+        <ion-header :hidden="landscape">
             <ion-toolbar>
                 <ion-title>Billeder</ion-title>
                 <ion-buttons slot="secondary">
@@ -29,20 +29,19 @@
 
 <script lang="ts">
 
+import { Camera } from '@capacitor/camera';
 import {
-    IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonButtons, IonIcon, toastController, IonSpinner
+IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonList, IonPage, IonSpinner, IonTitle, IonToolbar, toastController
 } from '@ionic/vue';
+import { add } from 'ionicons/icons';
 import { defineComponent } from 'vue';
-import { Camera } from '@capacitor/camera'
-import client from '../api'
+import client from '../api';
 import type { Media } from '../api/client';
-import type { CameraPermissionType } from '@capacitor/camera';
-import { add } from 'ionicons/icons'
-import { isPlatform, getPlatforms } from '@ionic/vue';
 
 type Data = {
     photos: Media[]
-    loading: boolean
+    loading: boolean,
+    landscape: boolean
 }
 
 export default defineComponent({
@@ -50,6 +49,8 @@ export default defineComponent({
         IonContent, IonPage, IonTitle, IonHeader, IonToolbar, IonList, IonButton, IonButtons, IonIcon, IonSpinner
     },
     setup() {
+
+
         return {
             add
         }
@@ -57,42 +58,16 @@ export default defineComponent({
     data(): Data {
         return {
             photos: [],
-            loading: false
+            loading: false,
+            landscape: false
         }
     },
     methods: {
         async takePhoto() {
-            // console.log('check permissions...')
-            // let permissions = await Camera.checkPermissions()
-
-            // let requestPermissions: CameraPermissionType[] = [];
-
-            // if (permissions.camera != 'granted' && permissions.camera != 'denied') {
-            //     requestPermissions.push('camera');
-            // }
-            // if (permissions.photos != 'granted' && permissions.photos != 'denied') {
-            //     requestPermissions.push('photos');
-            // }
-
-            // console.log('isPlatform?', getPlatforms().map(platform => ({ platform, isThis: isPlatform(platform) })));
-
-            // if (requestPermissions.length > 0 && (isPlatform('ios') || isPlatform('android'))) {
-            //     console.log('requesting permissions...', requestPermissions)
-            //     try {
-            //         permissions = await Camera.requestPermissions({
-            //             permissions: requestPermissions
-            //         })
-            //     } catch (e) {
-            //         console.error(e)
-            //     }
-            // }
-
-            console.log('picking images...');
             const images = await Camera.pickImages({
                 quality: 100
             })
 
-            console.log('saving images...', images)
             this.loading = true;
 
             (await toastController.create({
@@ -132,10 +107,18 @@ export default defineComponent({
         },
         async updatePhotos() {
             this.photos = await client.getMedia();
+        },
+        updateOrientation() {
+            this.landscape = window.screen.orientation.type.includes('landscape')
         }
     },
     async mounted() {
+        window.screen.orientation.onchange = this.updateOrientation
+        this.updateOrientation();
         await this.updatePhotos();
+    },
+    async onUnmounted() {
+        window.screen.orientation.onchange = null
     }
 })
 </script>
