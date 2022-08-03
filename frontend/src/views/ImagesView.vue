@@ -31,7 +31,7 @@
 
 import { Camera } from '@capacitor/camera';
 import {
-IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonList, IonPage, IonSpinner, IonTitle, IonToolbar, toastController
+IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonList, IonPage, IonSpinner, IonTitle, IonToolbar, toastController, isPlatform
 } from '@ionic/vue';
 import { add } from 'ionicons/icons';
 import { defineComponent } from 'vue';
@@ -109,7 +109,7 @@ export default defineComponent({
             this.photos = await client.getMedia();
         },
         updateOrientation() {
-            this.landscape = window.screen.orientation.type.includes('landscape')
+            this.landscape = window.screen.orientation.type.includes('landscape') && !isPlatform("desktop")
         }
     },
     async mounted() {

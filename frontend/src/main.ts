@@ -31,7 +31,7 @@ if (process.env.NODE_ENV !== 'development') {
 }
 const app = createApp(App);
 
-const configure = ({ title, primaryColor, textColor, backgroundColor, cardBackgroundColor, iconColor, menuBackgroundColor, tableBorderColor }: Settings) => {
+const configure = ({ title, primaryColor, textColor, backgroundColor, cardBackgroundColor, menuBackgroundColor, tableBorderColor }: Settings) => {
   
   document.title = title;
   //https://ionicframework.com/docs/theming/colors
@@ -39,7 +39,7 @@ const configure = ({ title, primaryColor, textColor, backgroundColor, cardBackgr
   //background of all app
   document.documentElement.style.setProperty('--ion-background-color', backgroundColor);
   //background of score table header, create button container on form, and page header
-  document.documentElement.style.setProperty('--ion-toolbar-background', 'rgna(0,0,0,0)');
+  // document.documentElement.style.setProperty('--ion-toolbar-background', 'rgna(0,0,0,0)');
   //background of bottom navbar
   document.documentElement.style.setProperty('--ion-tab-bar-background', menuBackgroundColor);
   document.documentElement.style.setProperty('--ion-card-background', cardBackgroundColor);
